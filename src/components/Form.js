@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import '../App.css';
 import SubmitForm from '../pages/Submit';
+import countryDetails from './../country_details.json';
 
 function SearchForm(){
   const [selectedState, setSelectedState] = useState(0);
@@ -11,26 +12,45 @@ function SearchForm(){
     setSelectedState(e.target.value);
   }
 
+
+  let distinct_states = null;
+  let cityOptions  = null;
+  let cities = null;
+
+  let states = countryDetails.map(states => states.admin_name)
+  .filter((value, index, self) => self.indexOf(value) === index)
+
+  distinct_states = states.map((states) => <option key={states} value={states}>{states}</option>);
+  
+  if(selectedState){
+    console.log(selectedState)
+    let cityList = countryDetails.filter(states => states.admin_name === selectedState);
+    let cities = cityList.map(states => states.city)
+    cityOptions = cities.map((cities) => <option key={cities}>{cities}</option>);
+    // type= cityList.city
+    console.log(cities)
+  }
+
   const maharashtra = ["", "Mumbai", "Nagpur", "Pune"];
   const karnataka = ["", "Bangalore", "Hubali","Mangalore", "Udupi", "Puttur", "Karwar", "Manipal", "Karkala", "Kaup"];
   const kerala = ["", "Kochi", "Trivandrum", "Kollam", "Kasaragod", "Kottayam", "Pallakad"];
 
-  let options = null;
-  let type = null;
+  // let options = null;
+  // let type = null;
 
-  if(selectedState === "Maharashtra"){
-    type = maharashtra;
-  }
-  else if(selectedState === "Karnataka"){
-    type = karnataka;
-  }
-  else if(selectedState === "Kerala"){
-    type = kerala;
-  }
+  // if(selectedState === "Mahārāshtra"){
+  //   type = maharashtra;
+  // }
+  // else if(selectedState === "Karnātaka"){
+  //   type = karnataka;
+  // }
+  // else if(selectedState === "Kerala"){
+  //   type = kerala;
+  // }
 
-  if(type){
-    options = type.map((el) => <option key={el}>{el}</option>);
-  }
+  // if(type){
+  //   options = type.map((el) => <option key={el}>{el}</option>);
+  // }
 
   return(
     <div className="formDesign">
@@ -41,18 +61,19 @@ function SearchForm(){
         <Form.Group controlId="cbfState">
           <Form.Label>State</Form.Label>
           <Form.Control as="select" onChange={handleStateChange}>
-            <option></option>
+          {distinct_states }
+            {/* <option></option>
             <option>Delhi</option>
             <option>Karnataka</option>
             <option>Kerala</option>
-            <option>Maharashtra</option>
+            <option>Maharashtra</option> */}
           </Form.Control>
         </Form.Group>
         <Form.Group controlId="cbfCity">
           <Form.Label>City</Form.Label>
           <Form.Control as="select">
            {
-             options
+             cityOptions 
            }
            {/*<option>Bangalore</option>
             <option>Mangalore</option>
